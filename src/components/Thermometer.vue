@@ -13,10 +13,7 @@ const props = defineProps({
 
 const count = ref(0)
 
-// Generate unique ID for this component instance
-const uniqueId = ref(`thermo-${Math.random().toString(36).substr(2, 9)}`)
 const thermoContainerRef = ref(null)
-// const slothContainerRef = ref(null)
 
 // Computed property for scaled value between min and max
 const scaledValue = computed(() => {
@@ -88,11 +85,11 @@ const updateThermoPath = () => {
 
 // Functions to update count
 const incrementCount = () => {
-  count.value = Math.min(100, count.value + 5)
+  count.value = Math.min(100, count.value + 2)
 }
 
 const decrementCount = () => {
-  count.value = Math.max(0, count.value - 5)
+  count.value = Math.max(0, count.value - 2)
 }
 
 // Keyboard event handler
