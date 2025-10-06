@@ -7,4 +7,5 @@ export default defineConfig({
   plugins: [vue(), svgLoader({
     svgo: false
   })],
+  base: "https://oshwa.github.io/thermometer/",
 })
