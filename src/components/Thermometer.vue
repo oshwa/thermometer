@@ -14,6 +14,7 @@ const count = ref(0)
 // Generate unique ID for this component instance
 const uniqueId = ref(`thermo-${Math.random().toString(36).substr(2, 9)}`)
 const thermoContainerRef = ref(null)
+// const slothContainerRef = ref(null)
 
 // Computed property for scaled value between min and max
 const scaledValue = computed(() => {
@@ -52,12 +53,33 @@ V 438.40355
 `
 })
 
-// Function to update the SVG path
+// Computed property for sloth position based on percentage
+const currentSlothTransform = computed(() => {
+  const percentage = Math.max(0, Math.min(100, count.value))
+
+  // Move sloth up the thermometer based on percentage
+  // Base position is at the bottom, move up as percentage increases
+  const maxMoveDistance = 270 // Maximum pixels to move up
+  const moveY = -(maxMoveDistance * percentage) / 100
+
+  return `translate(0, ${moveY})`
+})
+
+// Function to update the SVG path and sloth position
 const updateThermoPath = () => {
   if (thermoContainerRef.value) {
     const thermoElement = thermoContainerRef.value.querySelector('#thermo')
     if (thermoElement) {
       thermoElement.setAttribute('d', currentThermoPath.value)
+    }
+
+    const slothElement = thermoContainerRef.value.querySelector('#sloth')
+    if (slothElement) {
+      // Get the original transform and replace only the translate part
+      const originalTransform = slothElement.getAttribute('transform') || ''
+      const baseTransform = originalTransform.replace(/translate\([^)]*\)/g, '').trim()
+      const newTransform = baseTransform ? `${baseTransform} ${currentSlothTransform.value}` : currentSlothTransform.value
+      slothElement.setAttribute('transform', newTransform)
     }
   }
 }
@@ -106,5 +128,10 @@ onMounted(() => {
 /* Add smooth transitions for the thermometer animation */
 :deep(#thermo) {
   transition: d 0.5s ease-in-out;
+}
+
+/* Add smooth transitions for the sloth movement */
+:deep(#sloth) {
+  transition: transform 0.5s ease-in-out;
 }
 </style>
