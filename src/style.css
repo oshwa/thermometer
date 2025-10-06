@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Alba';
+  src: url('./assets/fonts/Alba.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -33,13 +41,26 @@ body {
 }
 
 h1 {
+  font-family: 'Alba', system-ui, sans-serif;
   font-size: 3em;
   line-height: 1;
+  padding: 0.3em 0.6em;
+  margin: 0.2em 0;
 }
 
 h2 {
-  font-size: 2em;
+  font-family: 'Futura', 'Century Gothic', 'Avenir Next', 'Trebuchet MS', sans-serif;
+  font-size: 3em;
   line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background-color: #ff69b4;
+  border: 6px solid #000000;
+  border-radius: 20px;
+  padding: 0.3em 0.6em;
+  margin: 0.2em 0;
+  display: inline-block;
 }
 
 button {
@@ -76,8 +97,8 @@ button:focus-visible {
 .card-container {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
-  justify-content: center;
+  gap: 4rem;
+  justify-content: space-evenly;
   align-items: flex-start;
 }
 
@@ -87,8 +108,8 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
+  max-width: 1920px;
   padding: 2rem;
   text-align: center;
+  flex: auto;
 }

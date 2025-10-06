@@ -4,18 +4,26 @@ import OshwaLogo from './assets/oshwa_logo.svg?component'
 </script>
 
 <template>
-  <div>
+  <div class="logo-container">
     <a href="https://oshwa.org/" target="_blank">
       <OshwaLogo class="logo"/>
     </a>
   </div>
   <div class="card-container">
-    <Thermometer title="Membership" unit=" New Members" :min="0" :max="100"/>
+    <Thermometer title="Membership" unit=" New" :min="0" :max="100"/>
     <Thermometer title="Donations" unit=" $" :min="0" :max="2000"/>
   </div>
 </template>
 
 <style scoped>
+.logo-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
 .logo {
   height: 6em;
   padding: 1em;
