@@ -10,8 +10,8 @@ import OshwaLogo from './assets/oshwa_logo.svg?component'
     </a>
   </div>
   <div class="card-container">
-    <Thermometer title="Membership" unit=" New" :min="0" :max="100"/>
-    <Thermometer title="Donations" unit=" $" :min="0" :max="2000"/>
+    <Thermometer title="Membership" unit=" New" :min="0" :max="100" keyIncr="ArrowUp" keyDecr="ArrowDown"/>
+    <Thermometer title="Donations" unit=" $" :min="0" :max="2000" keyIncr="ArrowRight" keyDecr="ArrowLeft"/>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import ThermoComponent from '../assets/thermometer.svg?component'
 
 const props = defineProps({
@@ -7,6 +7,8 @@ const props = defineProps({
   unit: String,
   min: Number,
   max: Number,
+  keyIncr: String,
+  keyDecr: String
 })
 
 const count = ref(0)
@@ -93,19 +95,37 @@ const decrementCount = () => {
   count.value = Math.max(0, count.value - 5)
 }
 
+// Keyboard event handler
+const handleKeyPress = (event) => {
+  // Only respond to keyboard events when this component area is focused
+  if (event.key === props.keyIncr) {
+    event.preventDefault()
+    incrementCount()
+  } else if (event.key === props.keyDecr) {
+    event.preventDefault()
+    decrementCount()
+  }
+}
+
 // Watch for changes in count and update the path
 watch(count, () => {
   updateThermoPath()
 })
 
-// Update path on component mount
+// Update path on component mount and add keyboard listener
 onMounted(() => {
   updateThermoPath()
+  document.addEventListener('keydown', handleKeyPress)
+})
+
+// Cleanup keyboard listener
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeyPress)
 })
 </script>
 
 <template>
-  <div class="card">
+  <div class="card" tabindex="0" @keydown="handleKeyPress">
     <h1>{{ title }}</h1>
     <h2>{{ Math.round(scaledValue * 10) / 10 }}{{ unit }}</h2>
     <div id="thermo-container" ref="thermoContainerRef">
@@ -123,6 +143,15 @@ onMounted(() => {
 }
 #thermo-container {
   display: block;
+}
+
+.card {
+  outline: none;
+}
+
+.card:focus {
+  box-shadow: 0 0 0 3px rgba(82, 179, 229, 0.5);
+  border-radius: 8px;
 }
 
 /* Add smooth transitions for the thermometer animation */
