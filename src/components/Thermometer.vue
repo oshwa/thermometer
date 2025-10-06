@@ -15,6 +15,33 @@ const count = ref(0)
 
 const thermoContainerRef = ref(null)
 
+// Generate a unique storage key for this thermometer instance
+const storageKey = computed(() => `thermometer-${props.title?.toLowerCase().replace(/\s+/g, '-') || 'default'}`)
+
+// Load saved state from localStorage
+const loadState = () => {
+  try {
+    const saved = localStorage.getItem(storageKey.value)
+    if (saved !== null) {
+      const parsedValue = parseFloat(saved)
+      if (!isNaN(parsedValue)) {
+        count.value = Math.max(0, Math.min(100, parsedValue))
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to load thermometer state:', error)
+  }
+}
+
+// Save state to localStorage
+const saveState = () => {
+  try {
+    localStorage.setItem(storageKey.value, count.value.toString())
+  } catch (error) {
+    console.warn('Failed to save thermometer state:', error)
+  }
+}
+
 // Computed property for scaled value between min and max
 const scaledValue = computed(() => {
   const min = props.min || 0
@@ -86,10 +113,12 @@ const updateThermoPath = () => {
 // Functions to update count
 const incrementCount = () => {
   count.value = Math.min(100, count.value + 2)
+  saveState()
 }
 
 const decrementCount = () => {
   count.value = Math.max(0, count.value - 2)
+  saveState()
 }
 
 // Keyboard event handler
@@ -111,6 +140,7 @@ watch(count, () => {
 
 // Update path on component mount and add keyboard listener
 onMounted(() => {
+  loadState() // Load saved state first
   updateThermoPath()
   document.addEventListener('keydown', handleKeyPress)
 })
