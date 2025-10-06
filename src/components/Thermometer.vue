@@ -2,11 +2,26 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import ThermoComponent from '../assets/thermometer.svg?component'
 
-defineProps({
-  msg: String,
+const props = defineProps({
+  title: String,
+  unit: String,
+  min: Number,
+  max: Number,
 })
 
 const count = ref(0)
+
+// Generate unique ID for this component instance
+const uniqueId = ref(`thermo-${Math.random().toString(36).substr(2, 9)}`)
+const thermoContainerRef = ref(null)
+
+// Computed property for scaled value between min and max
+const scaledValue = computed(() => {
+  const min = props.min || 0
+  const max = props.max || 100
+  const range = max - min
+  return min + (count.value / 100) * range
+})
 
 // Computed property to generate dynamic path based on percentage
 const currentThermoPath = computed(() => {
@@ -39,9 +54,11 @@ V 438.40355
 
 // Function to update the SVG path
 const updateThermoPath = () => {
-  const thermoElement = document.querySelector('#thermo')
-  if (thermoElement) {
-    thermoElement.setAttribute('d', currentThermoPath.value)
+  if (thermoContainerRef.value) {
+    const thermoElement = thermoContainerRef.value.querySelector('#thermo')
+    if (thermoElement) {
+      thermoElement.setAttribute('d', currentThermoPath.value)
+    }
   }
 }
 
@@ -66,10 +83,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>{{ count }}%</h1>
-
   <div class="card">
-    <div id="thermo-container">
+    <h1>{{ title }}</h1>
+    <h2>{{ Math.round(scaledValue * 10) / 10 }}{{ unit }}</h2>
+    <div id="thermo-container" ref="thermoContainerRef">
       <ThermoComponent />
     </div>
     <button type="button" @click="incrementCount">+</button>
